@@ -19,16 +19,24 @@ const register = new schema({
   },
 });
 
-register.statics.registerUser = async function (userName, password) {
+register.statics.registerUser = async function (
+  userName,
+  password,
+  confirmPassword
+) {
   const exists = await this.findOne({ userName });
   if (exists) throw Error("User already exists");
 
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({ userName, password: hash });
+  const user = await this.create({
+    userName,
+    password: hash,
+    confirmPassword: hash,
+  });
 
-  return [user.username, user.password];
+  return [user.username, user.password, user.confirmPassword];
 };
 
 module.exports = mongoose.model("register", register);
