@@ -19,7 +19,7 @@ const register = new schema({
   },
 });
 
-register.statics.registerUser = async function (
+register.static.registerUser = async function (
   userName,
   password,
   confirmPassword
